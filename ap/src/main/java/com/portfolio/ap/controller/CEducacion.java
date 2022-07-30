@@ -37,7 +37,7 @@ public class CEducacion {
     @GetMapping("/detail/{id}")
     public ResponseEntity<Educacion> getById(@PathVariable("id") int id){
         if(!sEducacion.existsById(id))
-            return new ResponseEntity(new Mensaje("no existe"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new Mensaje("No existe el id"), HttpStatus.NOT_FOUND);
         Educacion educacion = sEducacion.getOne(id).get();
         return new ResponseEntity(educacion, HttpStatus.OK);
     }
@@ -47,7 +47,7 @@ public class CEducacion {
         if(StringUtils.isBlank(dtoedu.getNombreEd()))
                 return new ResponseEntity(new Mensaje("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
         if(sEducacion.existsByNombreEd(dtoedu.getNombreEd()))
-                return new ResponseEntity(new Mensaje("Esa educación existe"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Mensaje("Ese nombre ya existe"), HttpStatus.BAD_REQUEST);
         
         Educacion educacion = new Educacion(dtoedu.getNombreEd(), dtoedu.getDescripcionEd());
         sEducacion.save(educacion);
@@ -58,7 +58,7 @@ public class CEducacion {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id")int id){
         if(!sEducacion.existsById(id)){
-            return new ResponseEntity(new Mensaje("no existe"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new Mensaje("No existe el id"), HttpStatus.NOT_FOUND);
         }
         sEducacion.delete(id);
         return new ResponseEntity(new Mensaje("Educacíon eliminada"), HttpStatus.OK);
@@ -71,10 +71,10 @@ public class CEducacion {
             return new ResponseEntity(new Mensaje("El id no existe"), HttpStatus.BAD_REQUEST);
         //Compara nombre de experiencias
         if(sEducacion.existsByNombreEd(dtoedu.getNombreEd()) && sEducacion.getByNombreEd(dtoedu.getNombreEd()).get().getId() != id)
-            return new ResponseEntity(new Mensaje("Esa educación ya existe"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Mensaje("Ese nombre ya existe"), HttpStatus.BAD_REQUEST);
         //No puede estar vacio
         if(StringUtils.isBlank(dtoedu.getNombreEd()))
-            return new ResponseEntity(new Mensaje("El nombre es obligatorio"), HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity(new Mensaje("El campo no puede estar vacio"), HttpStatus.BAD_GATEWAY);
         
         Educacion educacion = sEducacion.getOne(id).get();
         educacion.setNombreEd(dtoedu.getNombreEd());
